@@ -10,7 +10,6 @@ An interactive educational game that teaches English prepositions through the bi
 - [Technologies Used](#technologies-used)
 - [Game Structure](#game-structure)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Description
 
