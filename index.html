@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moses' Preposition Journey</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5e5c0;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            color: #5a3d2b;
+        }
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff9e6;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        h1 {
+            color: #8b4513;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #a0522d;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .scene {
+            position: relative;
+            height: 300px;
+            background-color: #e6f7ff;
+            border: 3px solid #8b4513;
+            border-radius: 10px;
+            margin: 20px auto;
+            overflow: hidden;
+            background-image: url('https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+        }
+        .character {
+            position: absolute;
+            width: 60px;
+            transition: all 0.5s ease;
+        }
+        #moses {
+            bottom: 20px;
+            left: 50px;
+            width: 50px;
+        }
+        .object {
+            position: absolute;
+        }
+        #mountain {
+            width: 150px;
+            bottom: 0;
+            right: 100px;
+        }
+        #basket {
+            width: 70px;
+            bottom: 20px;
+            left: 200px;
+        }
+        #tablets {
+            width: 60px;
+            bottom: 90px;
+            right: 150px;
+            display: none;
+        }
+        #commandment {
+            background-color: #fff;
+            border: 2px solid #8b4513;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px auto;
+            max-width: 500px;
+            display: none;
+        }
+        .question {
+            font-size: 18px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .option {
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            background-color: #a0522d;
+            transform: translateY(-2px);
+        }
+        .option:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .progress {
+            margin-top: 20px;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background-color: #8b4513;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .feedback {
+            margin: 10px 0;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        .correct {
+            color: #2e8b57;
+        }
+        .incorrect {
+            color: #dc143c;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            background-color: #5a3d2b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            background-color: #8b4513;
+            transform: translateY(-2px);
+        }
+        .nav-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .completion {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 1.5s;
+        }
+        .stone-tablet {
+            display: inline-block;
+            width: 40px;
+            height: 60px;
+            background-color: #d3d3d3;
+            margin: 5px;
+            border-radius: 5px;
+            line-height: 60px;
+            font-weight: bold;
+            color: #5a3d2b;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .stone-tablet:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(139, 69, 19, 0.5);
+        }
+        .award-container {
+            position: relative;
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+        }
+        .award {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2583/2583344.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+        .award-text {
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            font-weight: bold;
+            color: #8b4513;
+            font-size: 20px;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            border-radius: 50%;
+            animation: fall 5s linear infinite;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes fall {
+            0% {
+                top: -10px;
+                opacity: 1;
+                transform: translateX(0);
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+                transform: translateX(calc(var(--random-offset) * 100px));
+            }
+        }
+        .celebration-verse {
+            font-style: italic;
+            margin: 20px 0;
+            color: #5a3d2b;
+            font-size: 18px;
+        }
+        .play-again-btn {
+            background-color: #8b4513;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .play-again-btn:hover {
+            background-color: #a0522d;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+        .question-counter {
+            font-size: 14px;
+            color: #8b4513;
+            margin-bottom: 10px;
+        }
+        .score-feedback {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #8b4513;
+        }
+        .score-praise {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #5a3d2b;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Moses' Preposition Journey</h1>
+        <p class="subtitle">Help Moses find the Ten Commandments by choosing the right prepositions!</p>
+        
+        <div class="question-counter" id="question-counter">Question 1 of 10</div>
+        
+        <div class="scene">
+            <img id="moses" class="character" src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="Moses">
+            <img id="mountain" class="object" src="https://cdn-icons-png.flaticon.com/512/2843/2843151.png" alt="Mountain">
+            <img id="basket" class="object" src="https://cdn-icons-png.flaticon.com/512/3082/3082016.png" alt="Basket">
+            <img id="tablets" class="object" src="https://cdn-icons-png.flaticon.com/512/2583/2583344.png" alt="Stone Tablets">
+        </div>
+        
+        <div id="commandment"></div>
+        
+        <div class="question" id="question">Where is the basket?</div>
+        
+        <div class="options" id="options">
+            </div>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prev-btn" disabled>← Previous</button>
+            <button class="nav-btn" id="next-btn" disabled>Next →</button>
+        </div>
+        
+        <div class="progress">
+            <p>Journey Progress: <span id="progress-text">0</span>/10</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="completion" id="completion">
+            <h2>🌟 Congratulations! 🌟</h2>
+            <p>You've successfully helped Moses collect all Ten Commandments!</p>
+            
+            <div class="score-feedback" id="final-score"></div>
+            <div class="score-praise" id="score-praise"></div>
+
+            <div class="award-container">
+                <div class="award"></div>
+                <div class="award-text">God's Law Keeper</div>
+            </div>
+            
+            <p class="celebration-verse">"Be holy in everything you do, just as God is holy."<br>— 1 Peter 1:15</p>
+            
+            <h3>The Ten Commandments You Collected:</h3>
+            <div id="tablets-display"></div>
+            
+            <button class="play-again-btn" onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Data and Configuration
+        const gameConfig = {
+            questions: [
+                {
+                    question: "The basket is ___ the mountain.",
+                    options: ["above", "beside", "behind", "below"],
+                    answer: "below",
+                    commandment: "1. I am the Lord your God. Have no other gods before me.",
+                    mosesPosition: { left: 50, bottom: 20 }
+                },
+                {
+                    question: "Moses is standing ___ the basket.",
+                    options: ["between", "beside", "above", "behind"],
+                    answer: "beside",
+                    commandment: "2. Do not make or worship idols.",
+                    mosesPosition: { left: 120, bottom: 20 }
+                },
+                {
+                    question: "The mountain is ___ Moses.",
+                    options: ["under", "in front of", "behind", "between"],
+                    answer: "behind",
+                    commandment: "3. Do not misuse God's name.",
+                    mosesPosition: { left: 200, bottom: 20 }
+                },
+                {
+                    question: "Moses will walk ___ the mountain.",
+                    options: ["around", "under", "in", "below"],
+                    answer: "around",
+                    commandment: "4. Keep the Sabbath day holy.",
+                    mosesPosition: { left: 250, bottom: 20 }
+                },
+                {
+                    question: "The tablets are ___ the mountain.",
+                    options: ["on", "under", "at", "between"],
+                    answer: "on",
+                    commandment: "5. Honor your father and mother.",
+                    mosesPosition: { left: 300, bottom: 20 },
+                    showTablets: true
+                },
+                {
+                    question: "Moses will go ___ the mountain.",
+                    options: ["up", "below", "under", "behind"],
+                    answer: "up",
+                    commandment: "6. Do not murder.",
+                    mosesPosition: { left: 150, bottom: 150 }
+                },
+                {
+                    question: "The sun is ___ the desert.",
+                    options: ["under", "above", "between", "beside"],
+                    answer: "above",
+                    commandment: "7. Do not commit adultery.",
+                    mosesPosition: { left: 200, bottom: 150 }
+                },
+                {
+                    question: "The people walked ___ the desert for 40 years.",
+                    options: ["above", "under", "through", "below"],
+                    answer: "through",
+                    commandment: "8. Do not steal.",
+                    mosesPosition: { left: 250, bottom: 150 }
+                },
+                {
+                    question: "Moses put the tablets ___ his arms.",
+                    options: ["above", "between", "under", "around"],
+                    answer: "between",
+                    commandment: "9. Do not give false testimony.",
+                    mosesPosition: { left: 300, bottom: 150 }
+                },
+                {
+                    question: "God's love is ___ us all.",
+                    options: ["under", "around", "below", "behind"],
+                    answer: "around",
+                    commandment: "10. Do not covet what belongs to others.",
+                    mosesPosition: { left: 400, bottom: 20 }
+                }
+            ],
+            sceneElements: {
+                moses: document.getElementById('moses'),
+                mountain: document.getElementById('mountain'),
+                basket: document.getElementById('basket'),
+                tablets: document.getElementById('tablets')
+            },
+            uiElements: {
+                questionElement: document.getElementById('question'),
+                optionsElement: document.getElementById('options'),
+                feedbackElement: document.getElementById('feedback'),
+                nextButton: document.getElementById('next-btn'),
+                prevButton: document.getElementById('prev-btn'),
+                progressText: document.getElementById('progress-text'),
+                progressFill: document.getElementById('progress-fill'),
+                completionElement: document.getElementById('completion'),
+                tabletsDisplay: document.getElementById('tablets-display'),
+                commandmentElement: document.getElementById('commandment'),
+                questionCounter: document.getElementById('question-counter'),
+                finalScore: document.getElementById('final-score'), // New element
+                scorePraise: document.getElementById('score-praise') // New element
+            }
+        };
+
+        // Game State
+        const gameState = {
+            currentQuestionIndex: 0,
+            score: 0,
+            userAnswers: Array(gameConfig.questions.length).fill(null),
+            answeredQuestions: Array(gameConfig.questions.length).fill(false)
+        };
+
+        // DOM Elements
+        const dom = gameConfig.uiElements;
+
+        // Initialize the game
+        function initGame() {
+            loadQuestion(gameState.currentQuestionIndex);
+            updateNavigationButtons();
+            updateProgress();
+        }
+
+        // Load a specific question
+        function loadQuestion(index) {
+            const question = gameConfig.questions[index];
+            
+            // Update UI elements
+            dom.questionElement.textContent = question.question;
+            dom.questionCounter.textContent = `Question ${index + 1} of ${gameConfig.questions.length}`;
+            
+            // Clear previous options
+            dom.optionsElement.innerHTML = '';
+            
+            // Create new option buttons
+            question.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.className = 'option';
+                
+                // Disable if already answered this question
+                if (gameState.userAnswers[index] !== null) {
+                    button.disabled = true;
+                    if (option === gameState.userAnswers[index]) {
+                        button.style.backgroundColor = option === question.answer ? '#2e8b57' : '#dc143c';
+                    }
+                }
+                
+                button.addEventListener('click', () => selectAnswer(option, index));
+                dom.optionsElement.appendChild(button);
+            });
+            
+            // Update Moses' position
+            updateScene(index);
+            
+            // Clear feedback and commandment display
+            dom.feedbackElement.textContent = '';
+            dom.feedbackElement.className = 'feedback';
+            dom.commandmentElement.style.display = 'none';
+            
+            // Show previous answer if exists
+            if (gameState.userAnswers[index] !== null) {
+                showFeedback(index);
+            }
+        }
+
+        // Update the visual scene based on question
+        function updateScene(index) {
+            const question = gameConfig.questions[index];
+            const moses = gameConfig.sceneElements.moses;
+            
+            // Update Moses' position
+            moses.style.left = `${question.mosesPosition.left}px`;
+            moses.style.bottom = `${question.mosesPosition.bottom}px`;
+            
+            // Show/hide tablets
+            if (question.showTablets) {
+                gameConfig.sceneElements.tablets.style.display = 'block';
+            } else {
+                gameConfig.sceneElements.tablets.style.display = 'none';
+            }
+        }
+
+        // Handle answer selection
+        function selectAnswer(selected, index) {
+            const question = gameConfig.questions[index];
+            if (gameState.userAnswers[index] === null) { // Only update score if not previously answered
+                gameState.userAnswers[index] = selected;
+                gameState.answeredQuestions[index] = true;
+                
+                if (selected === question.answer) {
+                    gameState.score++;
+                    dom.feedbackElement.textContent = 'Correct! Well done!';
+                    dom.feedbackElement.className = 'feedback correct';
+                    
+                    // Show the commandment
+                    dom.commandmentElement.textContent = question.commandment;
+                    dom.commandmentElement.style.display = 'block';
+                } else {
+                    dom.feedbackElement.textContent = `Oops! Try again. The correct answer is "${question.answer}".`;
+                    dom.feedbackElement.className = 'feedback incorrect';
+                }
+                
+                // Disable all options after answering
+                const options = dom.optionsElement.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.disabled = true;
+                    if (option.textContent === selected) {
+                        option.style.backgroundColor = selected === question.answer ? '#2e8b57' : '#dc143c';
+                    } else if (option.textContent === question.answer) {
+                        option.style.backgroundColor = '#2e8b57'; // Highlight correct answer
+                    }
+                });
+                
+                updateProgress();
+                updateNavigationButtons();
+            }
+        }
+
+        // Show feedback for a specific question
+        function showFeedback(index) {
+            const question = gameConfig.questions[index];
+            const userAnswer = gameState.userAnswers[index];
+            
+            if (userAnswer === question.answer) {
+                dom.feedbackElement.textContent = 'Correct! Well done!';
+                dom.feedbackElement.className = 'feedback correct';
+                dom.commandmentElement.textContent = question.commandment;
+                dom.commandmentElement.style.display = 'block';
+            } else {
+                dom.feedbackElement.textContent = `The correct answer is "${question.answer}".`;
+                dom.feedbackElement.className = 'feedback incorrect';
+            }
+        }
+
+        // Update navigation buttons state
+        function updateNavigationButtons() {
+            dom.prevButton.style.display = (gameState.currentQuestionIndex === 0) ? 'none' : 'block';
+            
+            const allQuestionsAnswered = gameState.answeredQuestions.every(answered => answered);
+
+            if (gameState.currentQuestionIndex === gameConfig.questions.length - 1) {
+                dom.nextButton.style.display = 'none';
+                if (allQuestionsAnswered) {
+                    showCompletion();
+                }
+            } else {
+                dom.nextButton.style.display = 'block';
+                // Only enable next button if the current question has been answered
+                dom.nextButton.disabled = !gameState.answeredQuestions[gameState.currentQuestionIndex];
+            }
+        }
+
+        // Update progress display
+        function updateProgress() {
+            dom.progressText.textContent = gameState.score;
+            dom.progressFill.style.width = `${(gameState.score / gameConfig.questions.length) * 100}%`;
+        }
+
+        // Navigate to next question
+        function nextQuestion() {
+            if (gameState.currentQuestionIndex < gameConfig.questions.length - 1) {
+                gameState.currentQuestionIndex++;
+                loadQuestion(gameState.currentQuestionIndex);
+                updateNavigationButtons();
+            } else if (gameState.currentQuestionIndex === gameConfig.questions.length - 1 && gameState.answeredQuestions[gameState.currentQuestionIndex]) {
+                showCompletion();
+            }
+        }
+
+        // Navigate to previous question
+        function prevQuestion() {
+            if (gameState.currentQuestionIndex > 0) {
+                gameState.currentQuestionIndex--;
+                loadQuestion(gameState.currentQuestionIndex);
+                updateNavigationButtons();
+            }
+        }
+
+        // Show completion screen
+        function showCompletion() {
+            document.querySelector('.scene').style.display = 'none';
+            dom.questionElement.style.display = 'none';
+            dom.optionsElement.style.display = 'none';
+            dom.feedbackElement.style.display = 'none';
+            dom.nextButton.style.display = 'none';
+            dom.prevButton.style.display = 'none';
+            dom.commandmentElement.style.display = 'none';
+            dom.questionCounter.style.display = 'none';
+            dom.progress.style.display = 'none'; // Hide progress bar on completion
+
+            // Display score
+            dom.finalScore.textContent = `Your Score: ${gameState.score} out of ${gameConfig.questions.length}`;
+
+            // Display praise/encouragement
+            let praiseMessage = "";
+            const percentage = (gameState.score / gameConfig.questions.length) * 100;
+            if (percentage === 100) {
+                praiseMessage = "Outstanding! You are a true master of prepositions!";
+            } else if (percentage >= 80) {
+                praiseMessage = "Excellent work! You've got a strong grasp of prepositions!";
+            } else if (percentage >= 60) {
+                praiseMessage = "Good effort! Keep practicing to become a preposition pro!";
+            } else {
+                praiseMessage = "Keep going! With a little more practice, you'll master these prepositions!";
+            }
+            dom.scorePraise.textContent = praiseMessage;
+            
+            // Create confetti celebration
+            createConfetti();
+            
+            // Display all commandments as stone tablets
+            dom.tabletsDisplay.innerHTML = '';
+            gameConfig.questions.forEach((q, index) => {
+                const tablet = document.createElement('div');
+                tablet.className = 'stone-tablet';
+                tablet.textContent = index + 1;
+                tablet.title = q.commandment;
+                tablet.addEventListener('click', () => {
+                    alert(q.commandment);
+                });
+                dom.tabletsDisplay.appendChild(tablet);
+            });
+            
+            dom.completionElement.style.display = 'block';
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff', '#8b4513', '#2e8b57'];
+            const container = document.querySelector('.game-container');
+            
+            // Remove existing confetti
+            const existingConfetti = document.querySelectorAll('.confetti');
+            existingConfetti.forEach(el => el.remove());
+            
+            // Create new confetti
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animationDelay = `${Math.random() * 5}s`;
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.setProperty('--random-offset', (Math.random() * 2 - 1));
+                container.appendChild(confetti);
+            }
+        }
+
+        // Reset the game
+        function resetGame() {
+            // Reset game state
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.userAnswers = Array(gameConfig.questions.length).fill(null);
+            gameState.answeredQuestions = Array(gameConfig.questions.length).fill(false);
+            
+            // Reset UI
+            dom.completionElement.style.display = 'none';
+            document.querySelector('.scene').style.display = 'block';
+            dom.questionElement.style.display = 'block';
+            dom.optionsElement.style.display = 'flex';
+            dom.feedbackElement.style.display = 'block';
+            dom.nextButton.style.display = 'block';
+            dom.prevButton.style.display = 'block';
+            dom.questionCounter.style.display = 'block';
+            dom.progress.style.display = 'block'; // Show progress bar again
+            
+            // Reload first question
+            loadQuestion(0);
+            updateProgress();
+            updateNavigationButtons();
+        }
+
+        // Event Listeners
+        dom.nextButton.addEventListener('click', nextQuestion);
+        dom.prevButton.addEventListener('click', prevQuestion);
+
+        // Initialize the game
+        initGame();
+    </script>
+</body>
+  </html>
