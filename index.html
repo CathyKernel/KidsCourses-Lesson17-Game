@@ -313,6 +313,7 @@
             background-color: #f0e6cc;
             border-radius: 10px;
             border: 2px solid #8b4513;
+            position: relative;
         }
         .admin-toggle {
             background-color: #5a3d2b;
@@ -416,6 +417,27 @@
             border-bottom: 2px solid #8b4513;
             padding-bottom: 5px;
         }
+        .exit-admin-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc143c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .exit-admin-btn:hover {
+            background-color: #b01030;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -480,6 +502,7 @@
         <button class="admin-toggle" id="admin-toggle">Admin Panel</button>
         
         <div class="admin-panel" id="admin-panel">
+            <button class="exit-admin-btn" id="exit-admin-btn">✕ Exit Admin</button>
             <h3 class="admin-section-title">Question Management</h3>
             
             <div class="admin-form" id="question-form">
@@ -625,6 +648,7 @@
                 // Admin panel elements
                 adminPanel: document.getElementById('admin-panel'),
                 adminToggle: document.getElementById('admin-toggle'),
+                exitAdminBtn: document.getElementById('exit-admin-btn'),
                 questionForm: document.getElementById('question-form'),
                 questionInput: document.getElementById('question-input'),
                 commandmentInput: document.getElementById('commandment-input'),
@@ -919,6 +943,11 @@
             // Toggle admin panel visibility
             dom.adminToggle.addEventListener('click', () => {
                 dom.adminPanel.style.display = dom.adminPanel.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            // Exit admin panel button
+            dom.exitAdminBtn.addEventListener('click', () => {
+                dom.adminPanel.style.display = 'none';
             });
             
             // Add option button
