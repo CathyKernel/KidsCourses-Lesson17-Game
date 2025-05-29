@@ -71,7 +71,7 @@
             width: 60px;
             bottom: 90px;
             right: 150px;
-            display: none; /* Initially hidden */
+            display: none;
         }
         #commandment {
             background-color: #fff;
@@ -80,7 +80,7 @@
             padding: 10px;
             margin: 10px auto;
             max-width: 500px;
-            display: none; /* Initially hidden */
+            display: none;
             font-style: italic;
             font-size: 15px;
             color: #8b4513;
@@ -134,7 +134,7 @@
         }
         .progress-fill {
             height: 100%;
-            background-color: #2e8b57; /* Green for progress */
+            background-color: #2e8b57;
             width: 0%;
             transition: width 0.5s;
         }
@@ -176,7 +176,7 @@
             opacity: 0.5;
         }
         .completion {
-            display: none; /* Initially hidden */
+            display: none;
             margin-top: 20px;
             animation: fadeIn 1.5s;
         }
@@ -209,7 +209,7 @@
         .award {
             width: 100%;
             height: 100%;
-            background-image: url('https://cdn-icons-png.flaticon.com/512/2583/2583344.png'); /* Stone tablets icon */
+            background-image: url('https://cdn-icons-png.flaticon.com/512/2583/2583344.png');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -229,7 +229,7 @@
             position: absolute;
             width: 10px;
             height: 10px;
-            background-color: #f00; /* Default color */
+            background-color: #f00;
             border-radius: 50%;
             animation: fall 5s linear infinite;
             z-index: 1000;
@@ -328,17 +328,17 @@
         </div>
         
         <div class="options" id="options">
-            </div>
+        </div>
         
         <div class="feedback" id="feedback"></div>
         
-        <div class="nav-buttons">
+        <div class="nav-buttons" id="nav-buttons-container">
             <button class="nav-btn" id="prev-btn" disabled>← Previous</button>
             <button class="nav-btn" id="next-btn" disabled>Next →</button>
         </div>
         
         <div class="progress">
-            <p>Journey Progress: <span id="progress-text">0</span>/10</p>
+            <p>Journey Progress: <span id="progress-text">0</span></p>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill"></div>
             </div>
@@ -348,7 +348,7 @@
             <h2>🌟 Congratulations! 🌟</h2>
             
             <div class="score-feedback" id="score-feedback">
-                </div>
+            </div>
             
             <div class="award-container">
                 <div class="award"></div>
@@ -357,97 +357,106 @@
             
             <p class="celebration-verse">"Be holy in everything you do, just as God is holy."<br>— 1 Peter 1:15</p>
             
-            <h3>The Ten Commandments You Collected:</h3>
-            <div id="tablets-display"></div>
+            <h3>The Ten Commandments You Learned About:</h3>
+            <div id="tablets-display">
+            </div>
             
             <button class="play-again-btn" onclick="resetGame()">Play Again</button>
         </div>
     </div>
 
     <script>
-        // Game Data and Configuration
         const gameConfig = {
             questions: [
                 {
-                    question: "The basket is ___ the mountain.",
-                    options: ["above", "beside", "behind", "below"],
-                    answer: "below",
-                    commandment: "1. I am the Lord your God. Have no other gods before me.",
-                    mosesPosition: { left: 50, bottom: 20 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    question: "Moses is ___ the basket.",
+                    options: ["near", "on", "under", "inside"],
+                    answer: "near",
+                    commandment: "1. I am the Lord your God; you shall have no other gods before Me.",
+                    mosesPosition: { left: 150, bottom: 20 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: false
                 },
                 {
-                    question: "Moses is standing ___ the basket.",
-                    options: ["between", "beside", "above", "behind"],
+                    question: "Moses is now standing ___ the basket.",
+                    options: ["beside", "above", "in", "far from"],
                     answer: "beside",
-                    commandment: "2. Do not make or worship idols.",
-                    mosesPosition: { left: 120, bottom: 20 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    commandment: "2. You shall not make for yourself an idol.",
+                    mosesPosition: { left: 270, bottom: 20 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: false
                 },
                 {
-                    question: "The mountain is ___ Moses.",
-                    options: ["under", "in front of", "behind", "between"],
-                    answer: "behind",
-                    commandment: "3. Do not misuse God's name.",
-                    mosesPosition: { left: 200, bottom: 20 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "Moses will walk ___ the mountain.",
-                    options: ["around", "under", "in", "below"],
-                    answer: "around",
-                    commandment: "4. Keep the Sabbath day holy.",
-                    mosesPosition: { left: 250, bottom: 20 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "The tablets are ___ the mountain.",
-                    options: ["on", "under", "at", "between"],
-                    answer: "on",
-                    commandment: "5. Honor your father and mother.",
-                    mosesPosition: { left: 300, bottom: 20 },
-                    showTablets: true,
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "Moses will go ___ the mountain.",
-                    options: ["up", "below", "under", "behind"],
-                    answer: "up",
-                    commandment: "6. Do not murder.",
-                    mosesPosition: { left: 150, bottom: 150 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "The sun is ___ the desert.",
-                    options: ["under", "above", "between", "beside"],
-                    answer: "above",
-                    commandment: "7. Do not commit adultery.",
-                    mosesPosition: { left: 200, bottom: 150 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "The people walked ___ the desert for 40 years.",
-                    options: ["above", "under", "through", "below"],
-                    answer: "through",
-                    commandment: "8. Do not steal.",
-                    mosesPosition: { left: 250, bottom: 150 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "Moses put the tablets ___ his arms.",
-                    options: ["above", "between", "under", "around"],
-                    answer: "between",
-                    commandment: "9. Do not give false testimony.",
-                    mosesPosition: { left: 300, bottom: 150 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
-                },
-                {
-                    question: "God's love is ___ us all.",
-                    options: ["under", "around", "below", "behind"],
-                    answer: "around",
-                    commandment: "10. Do not covet what belongs to others.",
+                    question: "Moses walks ___ the big mountain.",
+                    options: ["towards", "away from", "over", "through"],
+                    answer: "towards",
+                    commandment: "3. You shall not misuse the name of the Lord your God.",
                     mosesPosition: { left: 400, bottom: 20 },
-                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: false
+                },
+                {
+                    question: "He stops ___ the foot of the mountain.",
+                    options: ["at", "on", "in", "under"],
+                    answer: "at",
+                    commandment: "4. Remember the Sabbath day by keeping it holy.",
+                    mosesPosition: { left: 480, bottom: 20 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: false
+                },
+                {
+                    question: "Moses begins to climb ___ the mountain.",
+                    options: ["up", "down", "around", "across"],
+                    answer: "up",
+                    commandment: "5. Honor your father and your mother.",
+                    mosesPosition: { left: 520, bottom: 80 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: false
+                },
+                {
+                    question: "The stone tablets are ___ the mountain top.",
+                    options: ["on", "under", "behind", "between"],
+                    answer: "on",
+                    commandment: "6. You shall not murder.",
+                    mosesPosition: { left: 530, bottom: 100 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: true
+                },
+                {
+                    question: "From the mountain, Moses looks ___ at the camp.",
+                    options: ["down", "up", "back", "through"],
+                    answer: "down",
+                    commandment: "7. You shall not commit adultery.",
+                    mosesPosition: { left: 530, bottom: 100 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: true
+                },
+                {
+                    question: "With the tablets, Moses comes ___ the mountain.",
+                    options: ["down", "up", "over", "along"],
+                    answer: "down",
+                    commandment: "8. You shall not steal.",
+                    mosesPosition: { left: 480, bottom: 40 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: true 
+                },
+                {
+                    question: "Moses walks ___ the basket on his way back.",
+                    options: ["past", "into", "onto", "through"],
+                    answer: "past",
+                    commandment: "9. You shall not give false testimony against your neighbor.",
+                    mosesPosition: { left: 150, bottom: 20 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: true 
+                },
+                {
+                    question: "God's laws are for all people ___ him.",
+                    options: ["around", "above", "only beside", "under"],
+                    answer: "around",
+                    commandment: "10. You shall not covet.",
+                    mosesPosition: { left: 350, bottom: 20 },
+                    sceneImage: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                    showTablets: true
                 }
             ],
             sceneElements: {
@@ -471,11 +480,11 @@
                 commandmentElement: document.getElementById('commandment'),
                 questionCounter: document.getElementById('question-counter'),
                 scoreFeedback: document.getElementById('score-feedback'),
-                awardText: document.getElementById('award-text')
+                awardText: document.getElementById('award-text'),
+                navButtonsContainer: document.getElementById('nav-buttons-container')
             }
         };
 
-        // Game State
         const gameState = {
             currentQuestionIndex: 0,
             score: 0,
@@ -483,37 +492,33 @@
             answeredQuestions: Array(gameConfig.questions.length).fill(false)
         };
 
-        // DOM Elements (shorthand for easier access)
         const dom = gameConfig.uiElements;
 
-        // Initialize the game
         function initGame() {
             loadQuestion(gameState.currentQuestionIndex);
             updateNavigationButtons();
             updateProgress();
-            // Ensure completion screen is hidden on init
             dom.completionElement.style.display = 'none';
+            const initialQuestion = gameConfig.questions[0];
+            if (initialQuestion && initialQuestion.mosesPosition) {
+                gameConfig.sceneElements.moses.style.left = `${initialQuestion.mosesPosition.left}px`;
+                gameConfig.sceneElements.moses.style.bottom = `${initialQuestion.mosesPosition.bottom}px`;
+            }
         }
 
-        // Load a specific question
         function loadQuestion(index) {
             const question = gameConfig.questions[index];
             
-            // Update UI elements
             dom.questionElement.textContent = question.question;
             dom.questionNumber.textContent = `${index + 1}.`;
             dom.questionCounter.textContent = `Question ${index + 1} of ${gameConfig.questions.length}`;
             
-            // Clear previous options
             dom.optionsElement.innerHTML = '';
-            
-            // Create new option buttons
             question.options.forEach(option => {
                 const button = document.createElement('button');
                 button.textContent = option;
                 button.className = 'option';
                 
-                // If the question has already been answered, show previous selection and disable buttons
                 if (gameState.userAnswers[index] !== null) {
                     button.disabled = true;
                     if (option === gameState.userAnswers[index]) {
@@ -525,78 +530,61 @@
                 dom.optionsElement.appendChild(button);
             });
             
-            // Update Moses' position and scene background
             updateScene(index);
             
-            // Clear feedback and commandment display
             dom.feedbackElement.textContent = '';
             dom.feedbackElement.className = 'feedback';
             dom.commandmentElement.style.display = 'none';
             
-            // Show previous answer feedback if exists
             if (gameState.userAnswers[index] !== null) {
                 showFeedback(index);
             }
         }
 
-        // Update the visual scene based on question
         function updateScene(index) {
             const question = gameConfig.questions[index];
             const moses = gameConfig.sceneElements.moses;
             const sceneContainer = gameConfig.sceneElements.sceneContainer;
             
-            // Update Moses' position
             moses.style.left = `${question.mosesPosition.left}px`;
             moses.style.bottom = `${question.mosesPosition.bottom}px`;
             
-            // Show/hide tablets
-            if (question.showTablets) {
-                gameConfig.sceneElements.tablets.style.display = 'block';
-            } else {
-                gameConfig.sceneElements.tablets.style.display = 'none';
+            gameConfig.sceneElements.tablets.style.display = question.showTablets ? 'block' : 'none';
+            
+            if (question.sceneImage) {
+                 sceneContainer.style.backgroundImage = `url('${question.sceneImage}')`;
             }
-
-            // Update scene background image
-            sceneContainer.style.backgroundImage = `url('${question.sceneImage}')`;
         }
 
-        // Handle answer selection
         function selectAnswer(selected, index) {
             const question = gameConfig.questions[index];
             
-            // Only update score and mark as answered if this is the first time answering this question
             if (!gameState.answeredQuestions[index]) {
-                gameState.userAnswers[index] = selected; // Store the user's answer
-                gameState.answeredQuestions[index] = true; // Mark as answered
+                gameState.userAnswers[index] = selected;
+                gameState.answeredQuestions[index] = true;
                 
                 if (selected === question.answer) {
                     gameState.score++;
                     dom.feedbackElement.textContent = 'Correct! Well done!';
                     dom.feedbackElement.className = 'feedback correct';
-                    
-                    // Show the commandment only for correct answers
                     dom.commandmentElement.textContent = question.commandment;
                     dom.commandmentElement.style.display = 'block';
                 } else {
                     dom.feedbackElement.textContent = `Oops! The correct answer is "${question.answer}".`;
                     dom.feedbackElement.className = 'feedback incorrect';
-                    // Do not show commandment for incorrect answers immediately
                     dom.commandmentElement.style.display = 'none';
                 }
             } else {
-                 // If already answered, just update feedback based on stored answer
                  showFeedback(index);
             }
             
-            // Disable all options after answering for the current question
             const options = dom.optionsElement.querySelectorAll('.option');
             options.forEach(option => {
                 option.disabled = true;
                 if (option.textContent === selected) {
                     option.style.backgroundColor = selected === question.answer ? '#2e8b57' : '#dc143c';
                 } else if (option.textContent === question.answer && gameState.userAnswers[index] !== question.answer) {
-                    // Highlight correct answer if user got it wrong
-                    option.style.backgroundColor = '#99C2FF'; // A lighter blue to indicate correct option
+                    option.style.backgroundColor = '#99C2FF'; 
                 }
             });
             
@@ -604,7 +592,6 @@
             updateNavigationButtons();
         }
 
-        // Show feedback for a specific question (used when navigating back)
         function showFeedback(index) {
             const question = gameConfig.questions[index];
             const userAnswer = gameState.userAnswers[index];
@@ -617,46 +604,48 @@
             } else {
                 dom.feedbackElement.textContent = `You answered "${userAnswer}". The correct answer is "${question.answer}".`;
                 dom.feedbackElement.className = 'feedback incorrect';
-                dom.commandmentElement.style.display = 'none'; // Ensure commandment is hidden if previously wrong
+                dom.commandmentElement.style.display = 'none';
             }
         }
 
-        // Update navigation buttons state
         function updateNavigationButtons() {
-            dom.prevButton.disabled = gameState.currentQuestionIndex === 0;
+            if (gameState.currentQuestionIndex === 0) {
+                dom.prevButton.style.display = 'none';
+            } else {
+                dom.prevButton.style.display = 'inline-block';
+                dom.prevButton.disabled = false;
+            }
             
             const isLastQuestion = gameState.currentQuestionIndex === gameConfig.questions.length - 1;
-            // The Next button should only be enabled if the current question has been answered
-            // or if we are reviewing an already answered question.
             dom.nextButton.disabled = !gameState.answeredQuestions[gameState.currentQuestionIndex] && !isLastQuestion;
 
-            // On the last question, if answered, the "Next" button should lead to completion.
             if (isLastQuestion && gameState.answeredQuestions[gameState.currentQuestionIndex]) {
                 dom.nextButton.textContent = "Finish Game";
+                 dom.nextButton.disabled = false;
             } else {
                 dom.nextButton.textContent = "Next →";
+                dom.nextButton.disabled = !gameState.answeredQuestions[gameState.currentQuestionIndex];
+            }
+            if (isLastQuestion && gameState.answeredQuestions[gameState.currentQuestionIndex]) {
+                dom.nextButton.disabled = false;
             }
         }
 
-        // Update progress display
         function updateProgress() {
-            dom.progressText.textContent = gameState.score;
+            dom.progressText.textContent = gameState.score; // Changed this line
             dom.progressFill.style.width = `${(gameState.score / gameConfig.questions.length) * 100}%`;
         }
 
-        // Navigate to next question or show completion screen
         function nextQuestion() {
             if (gameState.currentQuestionIndex < gameConfig.questions.length - 1) {
                 gameState.currentQuestionIndex++;
                 loadQuestion(gameState.currentQuestionIndex);
-                updateNavigationButtons();
             } else if (gameState.currentQuestionIndex === gameConfig.questions.length - 1 && gameState.answeredQuestions[gameState.currentQuestionIndex]) {
-                // Only show completion if on the last question AND it's been answered
                 showCompletion();
             }
+            updateNavigationButtons();
         }
 
-        // Navigate to previous question
         function prevQuestion() {
             if (gameState.currentQuestionIndex > 0) {
                 gameState.currentQuestionIndex--;
@@ -665,22 +654,18 @@
             }
         }
 
-        // Show completion screen with score feedback
         function showCompletion() {
-            // Hide game play elements
             document.querySelector('.scene').style.display = 'none';
-            dom.questionElement.style.display = 'none';
+            dom.questionElement.parentElement.style.display = 'none';
             dom.optionsElement.style.display = 'none';
             dom.feedbackElement.style.display = 'none';
-            dom.navButtons.style.display = 'none'; // Hide the container for nav buttons
+            dom.navButtonsContainer.style.display = 'none';
             dom.commandmentElement.style.display = 'none';
             dom.questionCounter.style.display = 'none';
-            document.querySelector('.progress').style.display = 'none'; // Hide the progress bar
+            document.querySelector('.progress').style.display = 'none';
             
-            // Create confetti celebration
             createConfetti();
             
-            // Display score feedback
             const percentage = (gameState.score / gameConfig.questions.length) * 100;
             let feedbackText, feedbackClass, awardTitle;
             
@@ -706,23 +691,20 @@
             dom.scoreFeedback.className = `score-feedback ${feedbackClass}`;
             dom.awardText.textContent = awardTitle;
             
-            // Display all commandments as stone tablets
             dom.tabletsDisplay.innerHTML = '';
             gameConfig.questions.forEach((q, index) => {
                 const tablet = document.createElement('div');
                 tablet.className = 'stone-tablet';
-                tablet.textContent = index + 1; // Display number on tablet
-                tablet.title = q.commandment; // Full commandment as tooltip
+                tablet.textContent = index + 1;
+                tablet.title = q.commandment;
                 tablet.addEventListener('click', () => {
                     alert(`Commandment ${index + 1}:\n${q.commandment}`);
                 });
                 
-                // Highlight correct answers
                 if (gameState.userAnswers[index] === q.answer) {
-                    tablet.style.backgroundColor = '#2e8b57'; // Correct answer color
+                    tablet.style.backgroundColor = '#2e8b57';
                     tablet.style.color = 'white';
                 } else if (gameState.userAnswers[index] !== null) {
-                    // Indicate incorrect but answered tablets
                     tablet.style.backgroundColor = '#dc143c';
                     tablet.style.color = 'white';
                 }
@@ -730,71 +712,54 @@
                 dom.tabletsDisplay.appendChild(tablet);
             });
             
-            dom.completionElement.style.display = 'block'; // Show the completion section
+            dom.completionElement.style.display = 'block';
         }
 
-        // Create confetti effect
         function createConfetti() {
             const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff', '#8b4513', '#2e8b57'];
             const container = document.querySelector('.game-container');
             
-            // Remove existing confetti to prevent accumulation on reset
             const existingConfetti = document.querySelectorAll('.confetti');
             existingConfetti.forEach(el => el.remove());
             
-            // Create new confetti
             for (let i = 0; i < 100; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
                 confetti.style.left = `${Math.random() * 100}%`;
                 confetti.style.animationDelay = `${Math.random() * 5}s`;
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.setProperty('--random-offset', (Math.random() * 2 - 1)); // For horizontal spread
+                confetti.style.setProperty('--random-offset', (Math.random() * 2 - 1));
                 container.appendChild(confetti);
             }
         }
 
-        // Reset the game
         function resetGame() {
-            // Reset game state
             gameState.currentQuestionIndex = 0;
             gameState.score = 0;
-            gameState.userAnswers = Array(gameConfig.questions.length).fill(null);
-            gameState.answeredQuestions = Array(gameConfig.questions.length).fill(false);
+            gameState.userAnswers.fill(null);
+            gameState.answeredQuestions.fill(false);
             
-            // Reset UI to initial state
             dom.completionElement.style.display = 'none';
             document.querySelector('.scene').style.display = 'block';
-            dom.questionElement.style.display = 'flex'; // Use flex as defined in CSS
-            dom.optionsElement.style.display = 'flex'; // Use flex as defined in CSS
+            dom.questionElement.parentElement.style.display = 'flex';
+            dom.optionsElement.style.display = 'flex';
             dom.feedbackElement.style.display = 'block';
-            dom.navButtons.style.display = 'flex'; // Show the container for nav buttons
+            dom.navButtonsContainer.style.display = 'flex';
             dom.questionCounter.style.display = 'block';
-            document.querySelector('.progress').style.display = 'block'; // Show the progress bar
+            document.querySelector('.progress').style.display = 'block';
             
-            // Reset next button text
             dom.nextButton.textContent = "Next →";
 
-            // Reload first question
-            loadQuestion(0);
-            updateProgress();
-            updateNavigationButtons();
+            initGame();
 
-            // Clear any lingering confetti
             const existingConfetti = document.querySelectorAll('.confetti');
             existingConfetti.forEach(el => el.remove());
         }
 
-        // Event Listeners
         dom.nextButton.addEventListener('click', nextQuestion);
         dom.prevButton.addEventListener('click', prevQuestion);
 
-        // Add a reference to the nav-buttons container
-        gameConfig.uiElements.navButtons = document.querySelector('.nav-buttons');
-
-
-        // Initialize the game when the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
-  </html>
+</html>
